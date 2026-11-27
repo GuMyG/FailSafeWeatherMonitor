@@ -1,13 +1,11 @@
 ﻿using FailSafeWeatherMonitor.Data;
 using FailSafeWeatherMonitor.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FailSafeWeatherMonitor.Services;
 
-// All work against the database is done in this class
 public static class DatabaseService
 {
-    // Saves the points that are not already in the database.
-    // Returns how many points were saved.
     public static int SaveNewPoints(List<WeatherDataPoint> points)
     {
         using var _db = new WeatherMonitorDbContext();
@@ -15,7 +13,6 @@ public static class DatabaseService
 
         foreach (WeatherDataPoint point in points)
         {
-            // Duplicate check: same station and same timestamp already saved?
             bool exists = _db.WeatherDataPoints.Any(w =>
                 w.StationName == point.StationName && w.Timestamp == point.Timestamp);
 
@@ -28,5 +25,27 @@ public static class DatabaseService
         }
 
         return savedCount;
+    }
+
+    public static List<string> GetStationNames()
+    {
+        using var _db = new WeatherMonitorDbContext();
+
+        return _db.WeatherDataPoints
+            .Select(w => w.StationName)
+            .Distinct()
+            .OrderBy(name => name)
+            .ToList();
+    }
+
+    public static List<WeatherDataPoint> GetMeasurements(string stationName)
+    {
+        using var _db = new WeatherMonitorDbContext();
+
+        return _db.WeatherDataPoints
+            .AsNoTracking()
+            .Where(w => w.StationName == stationName)
+            .OrderBy(w => w.Timestamp)
+            .ToList();
     }
 }
