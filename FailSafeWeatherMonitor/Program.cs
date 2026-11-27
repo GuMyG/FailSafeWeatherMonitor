@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using FailSafeWeatherMonitor.Services;
+using Spectre.Console;
 
 while (true)
 {
@@ -20,7 +21,7 @@ while (true)
     switch (choice)
     {
         case "Import historical data from file":
-            AnsiConsole.MarkupLine("[yellow]Coming soon...[/]");
+            FileImportService.ImportFromFile();
             break;
         case "Fetch live data from API":
             AnsiConsole.MarkupLine("[yellow]Coming soon...[/]");
