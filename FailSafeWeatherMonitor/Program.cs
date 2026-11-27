@@ -24,7 +24,7 @@ while (true)
             FileImportService.ImportFromFile();
             break;
         case "Fetch live data from API":
-            AnsiConsole.MarkupLine("[yellow]Coming soon...[/]");
+            ApiService.FetchLiveData();
             break;
         case "Show weather statistics":
             AnsiConsole.MarkupLine("[yellow]Coming soon...[/]");
